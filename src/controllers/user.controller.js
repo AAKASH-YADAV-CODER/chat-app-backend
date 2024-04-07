@@ -49,6 +49,7 @@ const signup = async (req, res) => {
         userName: newUser.userName,
         gender: newUser.gender,
         profilePic: newUser.profilePic,
+        message: "Successfully Signup✅",
         token,
       });
     } else {
@@ -87,6 +88,7 @@ const login = async (req, res) => {
       userName: existedData.userName,
       profilePic: existedData.profilePic,
       email: existedData.email,
+      message: "Successfully Login✅",
       token,
     });
   } catch (error) {
@@ -98,7 +100,7 @@ const login = async (req, res) => {
 const logout = (req, res) => {
   try {
     res.cookie("token", "", { maxAge: 0 });
-    res.status(200).json({ message: "Logged out successfully" });
+    res.status(200).json({ message: "Logged out successfully✅" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
     res.status(500).json({ error: "Internal Server Error" });

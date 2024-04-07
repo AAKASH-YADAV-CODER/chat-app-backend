@@ -5,11 +5,11 @@ const sendMessage = async (req, res) => {
   try {
     const { message } = req.body;
     const { id: receiverId } = req.params;
-    const { senderId } = req.user._id;
-    const newMessage = new Message({ message, receiverId, senderId });
-    if (!newMessage) {
-      res.status(200).json({ error: "Message Error" });
-    }
+    const senderId = req.user._id;
+
+    // if (!newMessage) {
+    //   res.status(200).json({ error: "Message Error" });
+    // }
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
     });
@@ -18,6 +18,7 @@ const sendMessage = async (req, res) => {
         participants: [senderId, receiverId],
       });
     }
+    const newMessage = new Message({ message, receiverId, senderId });
     if (newMessage) {
       conversation.messages.push(newMessage._id);
     }
@@ -32,16 +33,18 @@ const sendMessage = async (req, res) => {
 //This is For getting all messages
 const getMessage = async (req, res) => {
   try {
-    const { id: receiverId } = req.params;
-    const { senderId } = req.user._id;
+    const { id: userToChatId } = req.params;
+    const senderId = req.user._id;
+
     const conversation = await Conversation.findOne({
-      participants: { $all: [receiverId, senderId] },
-    }).populate("messages");
-    if (!conversation) {
-      return res.status(200).json({ error: "This Error From Getting Message" });
-    }
-    const message = conversation.messages;
-    res.status(200).json(message);
+      participants: { $all: [senderId, userToChatId] },
+    }).populate("messages"); // NOT REFERENCE BUT ACTUAL MESSAGES
+
+    if (!conversation) return res.status(200).json([]);
+
+    const messages = conversation.messages;
+
+    res.status(200).json(messages);
   } catch (error) {
     console.error("Error In Message get", error.message);
     res.status(400).json({ error: "Error In msg get" });
