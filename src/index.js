@@ -1,9 +1,10 @@
-import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connect from "./database/index.js";
 import cors from "cors";
-const app = express();
+import { app, server } from "./socket/socket.js";
+import express from "express";
+// const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -24,7 +25,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/getuser", getuserRouter);
 
-app.listen(port, () => {
+server.listen(port, () => {
   connect();
   console.log(`Listening on this port --> ${process.env.PORT}`);
 });
