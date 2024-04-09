@@ -1,10 +1,10 @@
+import path from "path";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connect from "./database/index.js";
 import cors from "cors";
 import { app, server } from "./socket/socket.js";
 import express from "express";
-import path from "path";
 // const app = express();
 app.use(express.json());
 app.use(cookieParser());
