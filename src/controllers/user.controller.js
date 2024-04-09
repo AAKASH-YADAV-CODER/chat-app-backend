@@ -41,7 +41,6 @@ const signup = async (req, res) => {
       profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
     });
     if (newUser) {
-      const token = generateJWT(newUser._id, res);
       await newUser.save();
       res.status(201).json({
         fullName: newUser.fullName,
@@ -50,7 +49,6 @@ const signup = async (req, res) => {
         gender: newUser.gender,
         profilePic: newUser.profilePic,
         message: "Successfully Signup✅",
-        token,
       });
     } else {
       res.status(400).json({ error: "Invalid User Data" });
